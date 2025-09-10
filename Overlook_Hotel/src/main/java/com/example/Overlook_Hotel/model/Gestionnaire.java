@@ -1,10 +1,14 @@
 package com.example.Overlook_Hotel.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,7 +31,15 @@ public class Gestionnaire {
     
     @Column(name = "mot_de_passe", nullable = false)
     private String motDePasse;
+
+    //Relation
+
+    @OneToMany(mappedBy = "gestionnaire", cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks;
     
+    @OneToMany(mappedBy = "gestionnaire", cascade = CascadeType.ALL)
+    private List<Employe> employe;
+
     // Constructeur
     public Gestionnaire() {}
     
@@ -52,4 +64,7 @@ public class Gestionnaire {
     
     public String getMotDePasse() { return motDePasse; }
     public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
+
+    public List<Employe> getEmploye() { return employe; }
+    public void setEmploye(List<Employe> employe) { this.employe = employe; }
 }

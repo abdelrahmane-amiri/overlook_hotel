@@ -30,10 +30,6 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
-
-    @ManyToOne
-    @JoinColumn(name = "id_employe") // nullable = true si l'employé n'est pas obligatoire
-    private Employe employe;
     
     @ManyToOne
     @JoinColumn(name = "id_chambre", nullable = false)
@@ -70,9 +66,6 @@ public class Reservation {
     
     public Client getClient() { return client; }
     public void setClient(Client client) { this.client = client; }
-
-    public Employe getEmploye() { return employe; }
-    public void setEmploye(Employe employe) { this.employe = employe; }
         
     public Chambre getChambre() { return chambre; }
     public void setChambre(Chambre chambre) { this.chambre = chambre; }

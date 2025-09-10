@@ -37,7 +37,11 @@ public class Feedback {
     @ManyToOne
     @JoinColumn(name = "id_reservation", nullable = false)
     private Reservation reservation;
-    
+
+    @ManyToOne
+    @JoinColumn(name= "id_gestionnaire", nullable = false)
+    private Gestionnaire gestionnaire;
+
     // Constructeur
     public Feedback() {}
     
@@ -66,4 +70,9 @@ public class Feedback {
     
     public Reservation getReservation() { return reservation; }
     public void setReservation(Reservation reservation) { this.reservation = reservation; }
+
+    public Gestionnaire getGestionnaire() { return gestionnaire; }
+    public void setGestionnaire(Gestionnaire gestionnaire) { this.gestionnaire = gestionnaire; }
+
 }
+

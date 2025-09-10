@@ -33,10 +33,12 @@ public class Employe {
 
     //Relation
     @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL)
-    private List<Reservation> reservations;
-    
-    @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL)
-    private List<Client> clients;
+    private List<Chambre> chambre ;
+
+    @ManyToOne
+    @JoinColumn (name= "id_gestionnaire", nullable = false)
+    private Gestionnaire gestionnaire;
+
 
     //Constructeur
     public Employe() {}
@@ -59,11 +61,10 @@ public class Employe {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     
-    public List<Reservation> getReservations() { return reservations; }
-    public void setReservations(List<Reservation> reservations) { this.reservations = reservations; }
-    
-    public List<Client> getClient() { return clients; }
-    public void setFeedbacks(List<Client> client) { this.clients = client; }
-    
+    public List<Chambre> getChambre() { return chambre; }
+    public void setChambre(List<Chambre> chambre) { this.chambre = chambre; }
 
+    public Gestionnaire getGestionnaire() { return gestionnaire; }
+    public void setGestionnaire(Gestionnaire gestionnaire) { this.gestionnaire = gestionnaire; }
+    
 }

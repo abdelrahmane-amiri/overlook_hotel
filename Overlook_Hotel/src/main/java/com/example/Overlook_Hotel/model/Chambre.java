@@ -28,6 +28,11 @@ public class Chambre {
     // Relation
     @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
+
+
+    @ManyToOne
+    @JoinColumn (name= "id_employe")
+    private Employe employe; 
     
     // Constructeur
     public Chambre() {}
@@ -55,4 +60,8 @@ public class Chambre {
     
     public List<Reservation> getReservations() { return reservations; }
     public void setReservations(List<Reservation> reservations) { this.reservations = reservations; }
+
+    public Employe getEmploye() { return employe; }
+    public void setEmploye(Employe employe) { this.employe = employe; }
+
 }
