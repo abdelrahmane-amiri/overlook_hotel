@@ -13,6 +13,8 @@ public interface EmployeRepository extends JpaRepository<Employe, Integer> {
 
     Optional<Employe> findById(Integer id);
 
+    Optional<Employe> findByEmail(String email);
+
     boolean existsByEmail(String email);
 
     List<Employe> findByNom(String nom);
