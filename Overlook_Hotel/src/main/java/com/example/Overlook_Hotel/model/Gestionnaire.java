@@ -2,6 +2,8 @@ package com.example.Overlook_Hotel.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +40,7 @@ public class Gestionnaire {
     private List<Feedback> feedbacks;
     
     @OneToMany(mappedBy = "gestionnaire", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Employe> employe;
 
     // Constructeur

@@ -37,16 +37,32 @@ public class ReservationService {
     }
 
     public Reservation save(Reservation reservation) {
+        // Validation des données d'entrée
+        validateReservationInput(reservation);
+        
+        // Récupérer la chambre complète avec tous ses détails
+        Chambre chambreComplete = getChambreComplete(reservation.getChambre().getIdChambre());
+        reservation.setChambre(chambreComplete);
+        
+        // Récupérer le client complet avec tous ses détails
+        Client clientComplet = getClientComplet(reservation.getClient().getIdClient());
+        reservation.setClient(clientComplet);
+        
         // Validation des dates
         validateReservationDates(reservation.getDateDebut(), reservation.getDateFin());
         
         // Vérification de la disponibilité de la chambre
-        validateChambreAvailability(reservation.getChambre(), reservation.getDateDebut(), reservation.getDateFin());
+        validateChambreAvailability(chambreComplete, reservation.getDateDebut(), reservation.getDateFin());
         
         // Calcul du prix total si non fourni
         if (reservation.getPrixTotal() == null) {
-            BigDecimal prixTotal = calculatePrixTotal(reservation.getChambre(), reservation.getDateDebut(), reservation.getDateFin());
+            BigDecimal prixTotal = calculatePrixTotal(chambreComplete, reservation.getDateDebut(), reservation.getDateFin());
             reservation.setPrixTotal(prixTotal);
+        }
+        
+        // Définir un statut par défaut si non fourni
+        if (reservation.getStatut() == null || reservation.getStatut().trim().isEmpty()) {
+            reservation.setStatut("en_attente");
         }
         
         return reservationRepository.save(reservation);
@@ -75,7 +91,7 @@ public class ReservationService {
             
             // Vérification de la disponibilité si la chambre ou les dates changent
             Chambre chambre = reservationDetails.getChambre() != null ? 
-                reservationDetails.getChambre() : reservation.getChambre();
+                getChambreComplete(reservationDetails.getChambre().getIdChambre()) : reservation.getChambre();
             
             validateChambreAvailability(chambre, newDateDebut, newDateFin, id);
         }
@@ -98,11 +114,13 @@ public class ReservationService {
         }
         
         if (reservationDetails.getClient() != null) {
-            reservation.setClient(reservationDetails.getClient());
+            Client clientComplet = getClientComplet(reservationDetails.getClient().getIdClient());
+            reservation.setClient(clientComplet);
         }
         
         if (reservationDetails.getChambre() != null) {
-            reservation.setChambre(reservationDetails.getChambre());
+            Chambre chambreComplete = getChambreComplete(reservationDetails.getChambre().getIdChambre());
+            reservation.setChambre(chambreComplete);
         }
 
         return reservationRepository.save(reservation);
@@ -111,18 +129,6 @@ public class ReservationService {
     public List<Reservation> findByStatut(String statut) {
         return reservationRepository.findAll().stream()
                 .filter(r -> r.getStatut().equalsIgnoreCase(statut))
-                .toList();
-    }
-
-    public List<Reservation> findByDateDebutBetween(LocalDate startDate, LocalDate endDate) {
-        return reservationRepository.findAll().stream()
-                .filter(r -> !r.getDateDebut().isBefore(startDate) && !r.getDateDebut().isAfter(endDate))
-                .toList();
-    }
-
-    public List<Reservation> findByDateFinBetween(LocalDate startDate, LocalDate endDate) {
-        return reservationRepository.findAll().stream()
-                .filter(r -> !r.getDateFin().isBefore(startDate) && !r.getDateFin().isAfter(endDate))
                 .toList();
     }
 
@@ -149,10 +155,45 @@ public class ReservationService {
         reservation.setStatut("terminee");
         
         // Ajouter des points de fidélité au client
-        int points = calculatePointsFidelite(reservation.getPrixTotal());
-        clientService.addPoints(reservation.getClient().getIdClient(), points);
+        if (reservation.getPrixTotal() != null) {
+            int points = calculatePointsFidelite(reservation.getPrixTotal());
+            clientService.addPoints(reservation.getClient().getIdClient(), points);
+        }
         
         return reservationRepository.save(reservation);
+    }
+
+    // Méthodes privées utilitaires
+    private void validateReservationInput(Reservation reservation) {
+        if (reservation == null) {
+            throw new RuntimeException("La réservation ne peut pas être null");
+        }
+        
+        if (reservation.getChambre() == null || reservation.getChambre().getIdChambre() == null) {
+            throw new RuntimeException("Une chambre valide est obligatoire");
+        }
+        
+        if (reservation.getClient() == null || reservation.getClient().getIdClient() == null) {
+            throw new RuntimeException("Un client valide est obligatoire");
+        }
+        
+        if (reservation.getDateDebut() == null) {
+            throw new RuntimeException("La date de début est obligatoire");
+        }
+        
+        if (reservation.getDateFin() == null) {
+            throw new RuntimeException("La date de fin est obligatoire");
+        }
+    }
+
+    private Chambre getChambreComplete(Integer chambreId) {
+        return chambreService.findById(chambreId)
+                .orElseThrow(() -> new RuntimeException("Chambre non trouvée avec l'ID: " + chambreId));
+    }
+
+    private Client getClientComplet(Integer clientId) {
+        return clientService.getClientById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'ID: " + clientId));
     }
 
     private void validateReservationDates(LocalDate dateDebut, LocalDate dateFin) {
@@ -197,6 +238,10 @@ public class ReservationService {
     }
 
     private BigDecimal calculatePrixTotal(Chambre chambre, LocalDate dateDebut, LocalDate dateFin) {
+        if (chambre.getPrixNuit() == null) {
+            throw new RuntimeException("Le prix par nuit de la chambre n'est pas défini");
+        }
+        
         long numberOfNights = ChronoUnit.DAYS.between(dateDebut, dateFin);
         return chambre.getPrixNuit().multiply(BigDecimal.valueOf(numberOfNights));
     }
