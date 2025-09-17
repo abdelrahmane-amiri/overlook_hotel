@@ -33,7 +33,7 @@ public class Client {
     private String motDePasse;
     
     @Column(name = "telephone")
-    private String telephone;
+    private Integer telephone;
     
     @Column(name = "points_fidelite")
     private Integer points = 0;
@@ -72,8 +72,8 @@ public class Client {
     public String getMotDePasse() { return motDePasse; }
     public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
     
-    public String getTelephone() { return telephone; }
-    public void setTelephone(String telephone) { this.telephone = telephone; }
+    public Integer getTelephone() { return telephone; }
+    public void setTelephone(Integer telephone) { this.telephone = telephone; }
     
     public Integer getPoints() { return points; }
     public void setPointsFidelite(Integer points) { this.points= points; }

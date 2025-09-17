@@ -19,7 +19,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     List<Client> findByPrenom(String prenom);
 
-    Optional<Client> findByTelephone(String telephone);
+    Optional<Client> findByTelephone(Integer telephone);
 
     List<Client> findByPoints(Integer points);
 }
