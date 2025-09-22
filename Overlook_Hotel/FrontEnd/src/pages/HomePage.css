@@ -1,0 +1,172 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  z-index: 10;
+}
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.navbar nav a {
+  margin-left: 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar nav a:hover {
+  color: #facc15;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  height: 100vh; /* prend 100% de la hauteur de l'écran */
+  background: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80")
+    center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+.hero-content {
+  position: relative;
+  color: white;
+  text-align: center;
+  z-index: 1;
+}
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+.hero-content p {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+.hero-content button {
+  padding: 15px 30px;
+  font-size: 1rem;
+  border: none;
+  background: #facc15;
+  color: black;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.hero-content button:hover {
+  background: #fcd34d;
+}
+
+/* Rooms */
+.rooms {
+  padding: 80px 20px;
+  text-align: center;
+}
+.room-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-top: 30px;
+}
+.room-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 300px;
+}
+.room-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.room-card h3 {
+  margin: 15px;
+}
+.room-card p {
+  margin: 0 15px 20px 15px;
+  color: #666;
+}
+
+/* Services */
+.services {
+  background: #f8f8f8;
+  padding: 80px 20px;
+  text-align: center;
+}
+.service-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-top: 30px;
+}
+.service-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 250px;
+}
+.service-card h3 {
+  margin-bottom: 10px;
+  color: #222;
+}
+.service-card p {
+  color: #555;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 80px 20px;
+  background: #facc15;
+}
+.cta h2 {
+  margin-bottom: 20px;
+}
+.cta button {
+  padding: 15px 40px;
+  font-size: 1rem;
+  border: none;
+  background: black;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cta button:hover {
+  background: #333;
+}
+
+/* Footer */
+.footer {
+  background: #111;
+  color: #bbb;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+}
